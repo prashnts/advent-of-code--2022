@@ -38,7 +38,6 @@ def grouped_max(data):
 
     # Top 3 elves
     groups.sort(reverse=True)
-    print(groups)
     yield sum(groups[:3])
 
 
