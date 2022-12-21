@@ -2,8 +2,8 @@ import os
 import json
 
 from collections import namedtuple
-from collections.abc import Sequence
-from typing import Iterator, TypeVar
+from itertools import zip_longest
+from typing import Iterator
 
 __here__ = os.path.dirname(__file__)
 
@@ -33,7 +33,6 @@ TEST_DATA = '''\
 [1,[2,[3,[4,[5,6,0]]]],8,9]
 '''
 
-T = TypeVar('T')
 PacketPair = namedtuple('PacketPair', ['index', 'a', 'b'])
 
 def parse_input(data: str) -> Iterator[PacketPair]:
@@ -42,18 +41,6 @@ def parse_input(data: str) -> Iterator[PacketPair]:
     for ix, pair in enumerate(groups):
         pa, pb = pair.split('\n')
         yield PacketPair(ix + 1, json.loads(pa), json.loads(pb))
-
-
-def pad_zip(a: Sequence[T], b: Sequence[T]) -> Iterator[tuple[T | None, T | None]]:
-    # Yields elements from a and b, padding shorter of them with None.
-    def value_or_none(colln, index):
-        try:
-            return colln[index]
-        except IndexError:
-            return None
-
-    for i in range(max(len(a), len(b))):
-        yield value_or_none(a, i), value_or_none(b, i)
 
 
 def compare_packet(a, b):
@@ -68,7 +55,7 @@ def compare_packet(a, b):
         return False
     elif type(a) == type(b) == list:
         # both are lists, iterate their elements.
-        for a1, b1 in pad_zip(a, b):
+        for a1, b1 in zip_longest(a, b, fillvalue=None):
             if a1 is None:
                 # left list ran out, input in right order.
                 return True
