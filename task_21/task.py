@@ -90,7 +90,7 @@ def working_calculator(data: str) -> int:
                 continue
 
     # get the solved part of root equation.
-    other_monkey: int
+    other_monkey: str
     target: int
     if root.lhs in scalars:
         target = scalars[root.lhs]
