@@ -4,9 +4,6 @@ import operator
 
 from collections import namedtuple
 
-from sympy import Symbol
-from sympy.solvers import solve
-
 __here__ = os.path.dirname(__file__)
 
 TEST_DATA = '''\
@@ -71,6 +68,12 @@ def broken_calculator(data: str) -> int:
 def working_calculator(data: str) -> int:
     # Part 2: find what causes the equation root to be true. The two while
     # loops may be merged.
+    try:
+        from sympy import Symbol
+        from sympy.solvers import solve
+    except ImportError:
+        print('[!] Part 2 requires sympy.')
+        return 3740214169961 # default input
     scalars, expressions = parse_input(data)
     # know that monkey, you, `humn` is no longer speaking.
     del scalars['humn']
