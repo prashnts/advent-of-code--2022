@@ -3,7 +3,6 @@ import os
 import re
 import time
 
-from collections import namedtuple
 from typing import NamedTuple
 
 __here__ = os.path.dirname(__file__)
@@ -107,7 +106,9 @@ class MonkeyMap:
             p = self.pos
             # change angle
             facing = (p.f + turn) % 4
-            self.pos = Pos(p.r, p.c, facing)
+            new_pos = Pos(p.r, p.c, facing)
+            self.path.append(new_pos)
+            self.pos = new_pos
         else:
             for _ in range(step):
                 new_pos = self.make_step()
